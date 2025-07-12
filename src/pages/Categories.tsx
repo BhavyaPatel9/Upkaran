@@ -12,16 +12,16 @@ import sprayerIcon from "@/assets/Paint_spray.png";
 import toolsIcon from "@/assets/power-tool.png";
 import gardeningIcon from "@/assets/Gardening_tools.png";
 import constructionIcon from "@/assets/Construction-tool.png";
-import engineeringIcon from "@/assets/Engineering_Tools.jpeg";
-import weldingIcon from "@/assets/Welding_Equipment.jpeg";
-import plumbingIcon from "@/assets/Plumbing_Tools.jpeg";
-import electricalIcon from "@/assets/Electrical_tools.jpeg";
-import automotiveIcon from "@/assets/Automotive.jpeg";
-import woodworkingIcon from "@/assets/Woodworking_Tools.jpeg";
-import safetyIcon from "@/assets/Safety_Equipment.jpeg";
-import liftingIcon from "@/assets/Lifting_Equipment.jpeg";
-import surveyingIcon from "@/assets/Surveying_tools.jpeg";
-import hvacIcon from "@/assets/HVAC.jpeg";
+import engineeringIcon from "@/assets/Engineering_Tools.png";
+import weldingIcon from "@/assets/Welding_Equipment.png";
+import plumbingIcon from "@/assets/Plumbing_Tools.png";
+import electricalIcon from "@/assets/Electrical_tools.png";
+import automotiveIcon from "@/assets/Automotive.png";
+import woodworkingIcon from "@/assets/Woodworking_Tools.png";
+import safetyIcon from "@/assets/Safety_Equipment.png";
+import liftingIcon from "@/assets/Lifting_Equipment.png";
+import surveyingIcon from "@/assets/Surveying_tools.png";
+import hvacIcon from "@/assets/HVAC.png";
 
 interface Category {
   id: string;

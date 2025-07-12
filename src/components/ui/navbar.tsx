@@ -1,16 +1,41 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Menu, X, User, Heart, Bell, LogOut, Settings } from "lucide-react";
+import { Search, Menu, X, User, Heart, Bell, LogOut, Settings, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LoginDialog } from "@/components/auth/login-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const [fullName, setFullName] = useState<string | null>(null);
+
+  const categories = [
+    { id: 1, name: "Power Drills", path: "/browse-tools?category=power-drills" },
+    { id: 2, name: "Cleaning Equipment", path: "/browse-tools?category=cleaning" },
+    { id: 3, name: "Paint & Spray", path: "/browse-tools?category=paint-spray" },
+    { id: 4, name: "Power Tools", path: "/browse-tools?category=power-tools" },
+    { id: 5, name: "Garden Tools", path: "/browse-tools?category=garden" },
+    { id: 6, name: "Construction Tools", path: "/browse-tools?category=construction" },
+    { id: 7, name: "Engineering Tools", path: "/browse-tools?category=engineering" },
+    { id: 8, name: "Welding Equipment", path: "/browse-tools?category=welding" },
+    { id: 9, name: "Plumbing Tools", path: "/browse-tools?category=plumbing" },
+    { id: 10, name: "Electrical Tools", path: "/browse-tools?category=electrical" },
+    { id: 11, name: "Automotive Tools", path: "/browse-tools?category=automotive" },
+    { id: 12, name: "Woodworking Tools", path: "/browse-tools?category=woodworking" },
+    { id: 13, name: "Safety Equipment", path: "/browse-tools?category=safety" },
+    { id: 14, name: "Lifting Equipment", path: "/browse-tools?category=lifting" },
+    { id: 15, name: "Surveying Tools", path: "/browse-tools?category=surveying" },
+    { id: 16, name: "HVAC Equipment", path: "/browse-tools?category=hvac" },
+  ];
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -45,9 +70,25 @@ export const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/browse-tools" className="ml-4 text-foreground hover:text-primary transition-colors">
-              Browse Tools
-            </Link>
+            <div className="relative group">
+              <Link to="/browse-tools" className="ml-4 text-foreground hover:text-primary transition-colors flex items-center gap-1">
+                Browse Tools
+                <ChevronDown className="w-4 h-4" />
+              </Link>
+              <div className="absolute top-full left-0 mt-1 w-56 bg-popover border border-border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="py-1">
+                  {categories.map((category) => (
+                    <Link
+                      key={category.id}
+                      to={category.path}
+                      className="block px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
             {/* <Link to="/list-tool" className="text-foreground hover:text-primary transition-colors">List Your Tool</Link> */}
             {user && (
               <>
