@@ -1,58 +1,67 @@
-# Welcome to your Lovable project
+# Upkaran - Tool Rental Platform
 
-## Project info
+A modern tool rental platform built with React, Supabase, and Stripe payments. Rent power tools, construction equipment, and DIY tools from verified owners in your area.
 
-**URL**: https://lovable.dev/projects/3cd10238-1f4a-4960-84b1-069857ffd3fa
+## 🚀 Features
 
-## How can I edit this code?
+- **Tool Browsing**: Browse tools by category (Drilling, Cleaning, Power Tools, Painting, Gardening, Construction)
+- **User Authentication**: Secure login/signup with Supabase Auth
+- **Rental Workflow**: Request → Approve → Pay → Deliver workflow
+- **Stripe Payments**: Secure payment processing with Stripe
+- **Owner Dashboard**: Manage tools, approve rentals, track earnings
+- **User Dashboard**: View rental history, manage bookings
+- **Responsive Design**: Works seamlessly on desktop and mobile
 
-There are several ways of editing your application.
+## 🛠️ Tech Stack
 
-**Use Lovable**
+- **Frontend**: React 18 + TypeScript + Vite
+- **UI Components**: shadcn/ui + Tailwind CSS
+- **Backend**: Supabase (PostgreSQL + Auth + Edge Functions)
+- **Payments**: Stripe
+- **Deployment**: Vercel/Netlify ready
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3cd10238-1f4a-4960-84b1-069857ffd3fa) and start prompting.
+## 📋 Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js 18+ and npm
+- Supabase account
+- Stripe account (for payments)
 
-**Use your preferred IDE**
+## 🚀 Quick Start
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/BhavyaPatel9/Upkaran.git
+cd Upkaran
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-Follow these steps:
+### 3. Environment Setup
+Create a `.env` file in the root directory:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### 4. Start Development Server
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Visit `http://localhost:5173` to see the application.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🗄️ Database Setup
 
-**Use GitHub Codespaces**
+### 1. Supabase Setup
+1. Create a new Supabase project
+2. Run the migration files in `supabase/migrations/`
+3. Set up environment variables in your Supabase dashboard
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## Seeding Sample Data
-
-To populate your database with sample tools for testing:
+### 2. Seed Sample Data
+To populate your database with sample tools:
 
 1. **Open your Supabase Dashboard**
 2. **Go to SQL Editor**
@@ -66,24 +75,66 @@ This will add 36 sample tools (6 per category) with realistic data including:
 - Location data across major Indian cities
 - Sample images from Unsplash
 
-## What technologies are used for this project?
+## 💳 Payment Setup
 
-This project is built with:
+### Stripe Configuration
+1. Create a Stripe account
+2. Get your API keys from Stripe Dashboard
+3. Set `STRIPE_SECRET_KEY` in Supabase Edge Functions environment
+4. Deploy the Edge Function: `supabase functions deploy create-stripe-payment`
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🚀 Deployment
 
-## How can I deploy this project?
+### Frontend (Vercel/Netlify)
+1. Connect your GitHub repository
+2. Set environment variables:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   - `STRIPE_PUBLISHABLE_KEY`
+   - `STRIPE_SECRET_KEY`
+3. Deploy
 
-Simply open [Lovable](https://lovable.dev/projects/3cd10238-1f4a-4960-84b1-069857ffd3fa) and click on Share -> Publish.
+### Backend (Supabase)
+1. Deploy migrations: `supabase db push`
+2. Deploy Edge Functions: `supabase functions deploy`
+3. Set environment variables in Supabase Dashboard
 
-## Can I connect a custom domain to my Lovable project?
+## 📁 Project Structure
 
-Yes, you can!
+```
+src/
+├── components/          # React components
+│   ├── auth/           # Authentication components
+│   ├── payment/        # Payment components
+│   ├── tools/          # Tool-related components
+│   └── ui/             # Reusable UI components
+├── pages/              # Page components
+├── hooks/              # Custom React hooks
+├── integrations/       # External service integrations
+│   └── supabase/       # Supabase client and types
+└── lib/                # Utility functions
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔧 Available Scripts
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push to branch: `git push origin feature-name`
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+
+---
+
+**Upkaran** - Making tool rental simple and accessible for everyone.
