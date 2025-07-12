@@ -69,7 +69,7 @@ const Index = () => {
       )}
       <HeroSection />
       <CategoriesSection />
-      <FeaturedTools />
+{/*       <FeaturedTools /> */}
       <HowItWorks />
       <Footer />
     </div>
