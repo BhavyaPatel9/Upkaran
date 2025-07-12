@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Menu, X, User, Heart, Bell, LogOut, Settings, ChevronDown } from "lucide-react";
+import { Search, Menu, X, User, Heart, Bell, LogOut, Settings, ChevronDown, MapPin, Edit3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LoginDialog } from "@/components/auth/login-dialog";
+import { LocationDialog } from "@/components/location-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -11,12 +12,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import LocationService, { Location } from "@/lib/location-service";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const [fullName, setFullName] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
 
   const categories = [
     { id: 1, name: "Power Drills", path: "/browse-tools?category=power-drills" },
@@ -47,12 +52,23 @@ export const Navbar = () => {
           .single();
         if (!error && data?.full_name) setFullName(data.full_name);
         else setFullName(null);
+        setUserEmail(user.email);
       } else {
         setFullName(null);
+        setUserEmail(null);
       }
     };
     fetchProfile();
   }, [user]);
+
+  useEffect(() => {
+    const loadLocation = async () => {
+      const locationService = LocationService.getInstance();
+      const location = await locationService.getCurrentLocation();
+      setCurrentLocation(location);
+    };
+    loadLocation();
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -113,6 +129,32 @@ export const Navbar = () => {
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Location Button */}
+            <LocationDialog onLocationChange={setCurrentLocation}>
+              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" />
+                {currentLocation ? (
+                  <span className="text-xs max-w-20 truncate">
+                    {(() => {
+                      const parts = currentLocation.address?.split(',').map(part => part.trim()) || [];
+                      // Look for city (usually 3rd or 4th part, after area)
+                      const city = parts.find((part, index) => 
+                        index >= 2 && 
+                        part.match(/^[A-Za-z\s]+$/) && 
+                        !part.toLowerCase().includes('india') &&
+                        !part.toLowerCase().includes('state') &&
+                        !part.toLowerCase().includes('pincode') &&
+                        !part.toLowerCase().includes('district')
+                      ) || parts[2] || parts[1] || 'Set Location';
+                      return city;
+                    })()}
+                  </span>
+                ) : (
+                  'Set Location'
+                )}
+              </Button>
+            </LocationDialog>
+
             {user && (
               <>
                 <Button variant="ghost" size="sm">
@@ -121,16 +163,62 @@ export const Navbar = () => {
                 <Button variant="ghost" size="sm">
                   <Bell className="w-4 h-4" />
                 </Button>
-                {fullName && (
-                  <span className="font-medium text-sm text-primary px-2">{fullName}</span>
-                )}
               </>
             )}
+
+            {/* Settings Dropdown */}
             {user ? (
-              <Button variant="outline" size="sm" onClick={signOut}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                    <Settings className="w-4 h-4" />
+                    <span className="hidden sm:inline">{fullName || 'Settings'}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-80">
+                  <div className="px-2 py-1.5 space-y-3">
+                    {/* User Info */}
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Name</p>
+                      <p className="text-sm font-medium">{fullName || 'User'}</p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Email</p>
+                      <p className="text-sm text-foreground">{userEmail}</p>
+                    </div>
+                    
+                    {/* Location Section */}
+                    {currentLocation && currentLocation.address ? (
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Current Location</p>
+                        <p className="text-xs text-foreground mb-2">{currentLocation.address}</p>
+                        <LocationDialog onLocationChange={setCurrentLocation}>
+                          <Button variant="outline" size="sm" className="w-full text-xs">
+                            <Edit3 className="w-3 h-3 mr-1" />
+                            Edit Location
+                          </Button>
+                        </LocationDialog>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Location</p>
+                        <LocationDialog onLocationChange={setCurrentLocation}>
+                          <Button variant="outline" size="sm" className="w-full text-xs">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            Set Location
+                          </Button>
+                        </LocationDialog>
+                      </div>
+                    )}
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <LoginDialog>
                 <Button variant="outline" size="sm">
@@ -139,6 +227,7 @@ export const Navbar = () => {
                 </Button>
               </LoginDialog>
             )}
+
             <Link to={user ? "/list-tool" : "/browse-tools"}>
               <Button size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90">
                 {user ? "List Your Tool" : "Get Started"}
@@ -188,11 +277,72 @@ export const Navbar = () => {
             
             {/* Mobile Actions */}
             <div className="space-y-2 pt-4 border-t border-border">
-              {user ? (
-                <Button variant="outline" className="w-full justify-start" onClick={signOut}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign Out
+              {/* Mobile Location */}
+              <LocationDialog onLocationChange={setCurrentLocation}>
+                <Button variant="outline" className="w-full justify-start">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  {currentLocation ? (
+                    <span className="truncate">
+                      {(() => {
+                        const parts = currentLocation.address?.split(',').map(part => part.trim()) || [];
+                        // Look for city (usually 3rd or 4th part, after area)
+                        const city = parts.find((part, index) => 
+                          index >= 2 && 
+                          part.match(/^[A-Za-z\s]+$/) && 
+                          !part.toLowerCase().includes('india') &&
+                          !part.toLowerCase().includes('state') &&
+                          !part.toLowerCase().includes('pincode') &&
+                          !part.toLowerCase().includes('district')
+                        ) || parts[2] || parts[1] || 'Set Location';
+                        return city;
+                      })()}
+                    </span>
+                  ) : (
+                    'Set Location'
+                  )}
                 </Button>
+              </LocationDialog>
+
+              {user ? (
+                <>
+                  <div className="space-y-2 p-3 bg-muted/50 rounded-lg">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Name</p>
+                      <p className="text-sm font-medium">{fullName || 'User'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="text-sm">{userEmail}</p>
+                    </div>
+                    {currentLocation && currentLocation.address && (
+                      <div>
+                        <p className="text-xs text-muted-foreground">Current Location</p>
+                        <p className="text-xs">{currentLocation.address}</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <LocationDialog onLocationChange={setCurrentLocation}>
+                    <Button variant="outline" className="w-full justify-start">
+                      {currentLocation ? (
+                        <>
+                          <Edit3 className="w-4 h-4 mr-2" />
+                          Edit Location
+                        </>
+                      ) : (
+                        <>
+                          <MapPin className="w-4 h-4 mr-2" />
+                          Set Location
+                        </>
+                      )}
+                    </Button>
+                  </LocationDialog>
+                  
+                  <Button variant="outline" className="w-full justify-start" onClick={signOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
               ) : (
                 <LoginDialog>
                   <Button variant="outline" className="w-full justify-start">
@@ -201,14 +351,12 @@ export const Navbar = () => {
                   </Button>
                 </LoginDialog>
               )}
+              
               <Link to={user ? "/list-tool" : "/browse-tools"} className="block">
                 <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">
                   {user ? "List Your Tool" : "Get Started"}
                 </Button>
               </Link>
-              {user && fullName && (
-                <div className="text-primary font-medium text-center pt-2">{fullName}</div>
-              )}
             </div>
           </div>
         </div>

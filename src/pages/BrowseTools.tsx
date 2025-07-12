@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/footer";
 import { ToolCard } from "@/components/tools/tool-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, MapPin, ArrowLeft } from "lucide-react";
+import { Search, Filter, MapPin, ArrowLeft, Navigation } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "@/contexts/location-context";
+import { LocationDialog } from "@/components/location-dialog";
 
 interface Tool {
   id: string;
@@ -31,6 +33,7 @@ interface Category {
 
 const BrowseTools = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [tools, setTools] = useState<Tool[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,11 +41,19 @@ const BrowseTools = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState("");
   const { toast } = useToast();
+  const { currentLocation } = useLocation();
 
   useEffect(() => {
     fetchTools();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      setSelectedCategory(categoryParam);
+    }
+  }, [searchParams]);
 
   const fetchTools = async () => {
     try {
@@ -90,6 +101,15 @@ const BrowseTools = () => {
     
     return matchesSearch && matchesCategory && matchesLocation;
   });
+
+  // Sort tools by distance if location is set
+  const sortedTools = currentLocation ? 
+    [...filteredTools].sort((a, b) => {
+      // Simple distance calculation (you can implement more sophisticated distance calculation)
+      const aDistance = a.location?.toLowerCase().includes(currentLocation.address?.toLowerCase() || '') ? 0 : 1;
+      const bDistance = b.location?.toLowerCase().includes(currentLocation.address?.toLowerCase() || '') ? 0 : 1;
+      return aDistance - bDistance;
+    }) : filteredTools;
 
   const handleRent = (toolId: string) => {
     // Navigate to tool detail page for booking
@@ -160,32 +180,42 @@ const BrowseTools = () => {
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <Input
-                  placeholder="Location"
+                  placeholder={currentLocation ? currentLocation.address?.split(',')[0] : "Location"}
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
                   className="pl-10"
                 />
               </div>
 
-              <Button variant="outline" className="w-full">
-                <Filter className="w-4 h-4 mr-2" />
-                More Filters
-              </Button>
+              <LocationDialog>
+                <Button variant="outline" className="w-full">
+                  <Navigation className="w-4 h-4 mr-2" />
+                  {currentLocation ? "Change Location" : "Set Location"}
+                </Button>
+              </LocationDialog>
             </div>
           </div>
         </div>
 
         {/* Results */}
         <div className="mb-6">
-          <p className="text-muted-foreground">
-            {filteredTools.length} tools found
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="text-muted-foreground">
+              {sortedTools.length} tools found
+            </p>
+            {currentLocation && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4" />
+                <span>Showing results near {currentLocation.address?.split(',')[0]}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Tools Grid */}
-        {filteredTools.length > 0 ? (
+        {sortedTools.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredTools.map((tool) => (
+            {sortedTools.map((tool) => (
               <ToolCard
                 key={tool.id}
                 tool={tool}
