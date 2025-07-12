@@ -1,7 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = "https://ucnasxinqweimswkzwgm.supabase.co";
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://ucnasxinqweimswkzwgm.supabase.co";
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+if (!SUPABASE_SERVICE_KEY) {
+  console.warn("Warning: SUPABASE_SERVICE_ROLE_KEY not found in environment variables. Some operations may fail.");
+}
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
