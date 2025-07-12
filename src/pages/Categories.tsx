@@ -12,6 +12,16 @@ import sprayerIcon from "@/assets/Paint_spray.png";
 import toolsIcon from "@/assets/power-tool.png";
 import gardeningIcon from "@/assets/Gardening_tools.png";
 import constructionIcon from "@/assets/Construction-tool.png";
+import engineeringIcon from "@/assets/Engineering_Tools.jpeg";
+import weldingIcon from "@/assets/Welding_Equipment.jpeg";
+import plumbingIcon from "@/assets/Plumbing_Tools.jpeg";
+import electricalIcon from "@/assets/Electrical_tools.jpeg";
+import automotiveIcon from "@/assets/Automotive.jpeg";
+import woodworkingIcon from "@/assets/Woodworking_Tools.jpeg";
+import safetyIcon from "@/assets/Safety_Equipment.jpeg";
+import liftingIcon from "@/assets/Lifting_Equipment.jpeg";
+import surveyingIcon from "@/assets/Surveying_tools.jpeg";
+import hvacIcon from "@/assets/HVAC.jpeg";
 
 interface Category {
   id: string;
@@ -21,12 +31,22 @@ interface Category {
 }
 
 const categoryIcons: Record<string, string> = {
-  "Power Drills": drillIcon,
+  "Drilling Tools": drillIcon,
   "Cleaning Equipment": vacuumIcon,
-  "Paint & Spray": sprayerIcon,
+  "Painting Tools": sprayerIcon,
   "Power Tools": toolsIcon,
   "Garden Tools": gardeningIcon,
   "Construction Tools": constructionIcon,
+  "Engineering Tools": engineeringIcon,
+  "Welding Equipment": weldingIcon,
+  "Plumbing Tools": plumbingIcon,
+  "Electrical Tools": electricalIcon,
+  "Automotive Tools": automotiveIcon,
+  "Woodworking Tools": woodworkingIcon,
+  "Safety Equipment": safetyIcon,
+  "Lifting Equipment": liftingIcon,
+  "Surveying Tools": surveyingIcon,
+  "HVAC Equipment": hvacIcon,
 };
 
 const Categories = () => {
@@ -76,7 +96,7 @@ const Categories = () => {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
           {categories.map((category) => (
             <Link key={category.id} to={`/category/${category.id}`}>
               <Card className="group hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer">

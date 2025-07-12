@@ -4,7 +4,7 @@ A modern tool rental platform built with React, Supabase, and Stripe payments. R
 
 ## 🚀 Features
 
-- **Tool Browsing**: Browse tools by category (Drilling, Cleaning, Power Tools, Painting, Gardening, Construction)
+- **Tool Browsing**: Browse tools by category (Drilling, Cleaning, Power Tools, Painting, Gardening, Construction, Engineering, Welding, Plumbing, Electrical, Automotive, Woodworking, Safety, Lifting, Surveying, HVAC)
 - **User Authentication**: Secure login/signup with Supabase Auth
 - **Rental Workflow**: Request → Approve → Pay → Deliver workflow
 - **Stripe Payments**: Secure payment processing with Stripe

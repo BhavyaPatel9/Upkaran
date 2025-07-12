@@ -8,6 +8,16 @@ import sprayerIcon from "@/assets/Paint_spray.png";
 import toolsIcon from "@/assets/power-tool.png";
 import gardeningIcon from "@/assets/Gardening_tools.png";
 import constructionIcon from "@/assets/Construction-tool.png";
+import engineeringIcon from "@/assets/Engineering_Tools.jpeg";
+import weldingIcon from "@/assets/Welding_Equipment.jpeg";
+import plumbingIcon from "@/assets/Plumbing_Tools.jpeg";
+import electricalIcon from "@/assets/Electrical_tools.jpeg";
+import automotiveIcon from "@/assets/Automotive.jpeg";
+import woodworkingIcon from "@/assets/Woodworking_Tools.jpeg";
+import safetyIcon from "@/assets/Safety_Equipment.jpeg";
+import liftingIcon from "@/assets/Lifting_Equipment.jpeg";
+import surveyingIcon from "@/assets/Surveying_tools.jpeg";
+import hvacIcon from "@/assets/HVAC.jpeg";
 
 const categories = [
   {
@@ -45,17 +55,97 @@ const categories = [
   {
     id: 5,
     name: "Garden Tools",
-    description: "Lawn mowers, trimmers, and gardening equipment",
+    description: "Lawn mowers, trimmers & landscaping equipment",
     icon: gardeningIcon,
-    count: "200+ tools",
+    count: "280+ tools",
     popular: false,
   },
   {
     id: 6,
     name: "Construction Tools",
-    description: "Heavy machinery and construction equipment",
+    description: "Heavy machinery & construction equipment",
     icon: constructionIcon,
     count: "150+ tools",
+    popular: false,
+  },
+  {
+    id: 7,
+    name: "Engineering Tools",
+    description: "Precision measuring instruments & calipers",
+    icon: engineeringIcon,
+    count: "120+ tools",
+    popular: false,
+  },
+  {
+    id: 8,
+    name: "Welding Equipment",
+    description: "MIG, TIG, Arc welders & accessories",
+    icon: weldingIcon,
+    count: "90+ tools",
+    popular: false,
+  },
+  {
+    id: 9,
+    name: "Plumbing Tools",
+    description: "Pipe wrenches, cutters & soldering equipment",
+    icon: plumbingIcon,
+    count: "200+ tools",
+    popular: false,
+  },
+  {
+    id: 10,
+    name: "Electrical Tools",
+    description: "Multimeters, testers & electrical equipment",
+    icon: electricalIcon,
+    count: "180+ tools",
+    popular: false,
+  },
+  {
+    id: 11,
+    name: "Automotive Tools",
+    description: "Car diagnostic tools & repair equipment",
+    icon: automotiveIcon,
+    count: "140+ tools",
+    popular: false,
+  },
+  {
+    id: 12,
+    name: "Woodworking Tools",
+    description: "Chisels, planes & traditional hand tools",
+    icon: woodworkingIcon,
+    count: "160+ tools",
+    popular: false,
+  },
+  {
+    id: 13,
+    name: "Safety Equipment",
+    description: "Hard hats, gloves & protective gear",
+    icon: safetyIcon,
+    count: "100+ tools",
+    popular: false,
+  },
+  {
+    id: 14,
+    name: "Lifting Equipment",
+    description: "Cranes, hoists & material handling",
+    icon: liftingIcon,
+    count: "80+ tools",
+    popular: false,
+  },
+  {
+    id: 15,
+    name: "Surveying Tools",
+    description: "Laser levels, theodolites & measuring",
+    icon: surveyingIcon,
+    count: "70+ tools",
+    popular: false,
+  },
+  {
+    id: 16,
+    name: "HVAC Equipment",
+    description: "Air conditioners, heaters & climate control",
+    icon: hvacIcon,
+    count: "110+ tools",
     popular: false,
   },
 ];
